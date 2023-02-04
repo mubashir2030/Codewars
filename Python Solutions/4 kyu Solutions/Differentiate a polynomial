@@ -1,0 +1,49 @@
+Create a function that differentiates a polynomial for a given value of x.
+
+Your function will receive 2 arguments: a polynomial as a string, and a point to evaluate the equation as an integer.
+
+Assumptions:
+There will be a coefficient near each x, unless the coefficient equals 1 or -1.
+There will be an exponent near each x, unless the exponent equals 0 or 1.
+All exponents will be greater or equal to zero
+Examples:
+differenatiate("12x+2", 3)      ==>   returns 12
+differenatiate("x^2+3x+2", 3)   ==>   returns 9
+
+
+
+from itertools import groupby
+def separate(a):
+    m = [''.join(g) for _,g in groupby(a, key=lambda x:'+' in x or '-' in x)]
+    res = []
+    while m:
+        if m[0] in '+-':
+            res += [''.join(m[:2])]
+            m = m[2:]
+        else:
+            res += [m[0]]
+            m = m[1:]
+    return res
+
+def check(x, point):
+    if x.strip('+-').isdigit():
+        return 0
+    if '^' not in x:
+        x = x+'^1'
+    if x.startswith('x'):
+        x = '+'+x
+    if '-x' in x:
+        x = x.replace('-x','-1x')
+    if '+x' in x:
+        x = x.replace('+x','+1x')
+    x = x.strip('+')
+    s = int(x[:x.index('x')])
+    l = int(x[x.index('^')+1:])
+    return s*l * point**(l-1)
+
+def differentiate(equation, point):
+    eq = separate(equation.strip(''))
+    res = 0
+    for x in eq:
+        res += check(x, point)
+    return res
