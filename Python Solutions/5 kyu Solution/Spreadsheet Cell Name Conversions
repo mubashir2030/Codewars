@@ -1,0 +1,50 @@
+DESCRIPTION:
+Background
+Those of you who have used spreadsheets will know that rows are identified by numbers and columns are identified by letters.
+
+For example the top left square of a spreadsheet is identified as A1, and the start of the grid is labelled like so:
+
+A1 | B1 | C1 
+---+----+---
+A2 | B2 | C2
+---+----+---
+A3 | B3 | C3
+The first 26 collums are labelled A to Z, then the label 27 becomes AA to 52 being AZ, then BA to BZ, and so on. ZZ rolls over to AAA
+
+In this kata, our internal data structure uses zero-based indexing for both row and index like so:
+
+(0,0) | (1,0) | (2,0) 
+------+-------+------
+(0,1) | (1,1) | (2,1) 
+------+-------+------
+(0,2) | (1,2) | (2,2) 
+Kata
+The kata is to write a class with the static helper routines to convert a cell's internal representation to its display representation and vice versa.
+
+You can assume that your inputs are validated.
+
+Warning
+However the initial solution was supplied by your boss, and he hasn't coded since his glory days with COBOL, you can be reasonably sure that the starter code he has given you will not work ...
+
+Luckily, the unit tests supplied by your co-worker will work though, as he is so up-to-date with his skills he writes new languages because he knows everything about computing already...
+
+
+
+
+
+class SpreadSheetHelper():    
+    def convert_to_display(internal):
+        n = internal[0]+1
+        res = ''
+        while n:
+            n -= 1
+            res = chr(65 + n%26) + res
+            n //= 26
+        return (res+str(internal[1]+1))
+    
+    def convert_to_internal(s):
+        al = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        ans = 0
+        for l in ''.join(i for i in s if i.isalpha()):
+            ans = ans*26 + al.index(l)+1
+        return (ans-1, int(''.join(i for i in s if i.isdigit()))-1)
