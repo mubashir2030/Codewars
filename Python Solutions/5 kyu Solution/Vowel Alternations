@@ -1,0 +1,33 @@
+Write a program that performs a search for solutions to a word game. The goal of the game is to find sets of five words that share a vowel alternation. E.g., one solution to the game might be the words:
+
+['last', 'lest', 'list', 'lost', 'lust']
+This list above is a valid solution instance since the vowels 'a', 'e', 'i', 'o', and 'u' occur in the same positions between the consonant clusters 'l' and 'st'.
+
+Your program should return a list of all solutions (like the list above) given a list of words to search through.
+
+Note that order matters. If you prefer to use sets for book-keeping purposes, that is fine, but you will need to sort your list of solutions, and each solution set itself.
+
+This is easy in Python:
+
+solutions = [set(['last', 'lest', 'list', 'lost', 'lust']),
+             set(['bill', 'bull', 'bell', 'ball', 'boll'])]
+
+sorted_soultions = sorted(sorted(solution) for solution in solutions)
+sorted_solutions == [['ball', 'bell', 'bill', 'boll', 'bull'],
+                     ['last', 'lest', 'list', 'lost', 'lust']]
+For the sake of simplificiation, you may assume that the words in the list you are searching over are unique.
+
+
+
+
+
+vowels = 'aeiou'
+def find_solutions(words):
+    words = sorted(list(set(words)), key=len)
+    res = []
+    for x in words:
+        for i,c in enumerate(x):
+            if c=='a':
+                if all(x[:i]+j+x[i+1:] in words for j in 'aeiou'):
+                    res += [sorted([x[:i]+j+x[i+1:] for j in 'aeiou'])]
+    return sorted(res)
